@@ -1,0 +1,142 @@
+<semantic-query 
+  query='
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+	PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+	PREFIX wdt:  <http://www.wikidata.org/prop/direct/>
+	PREFIX wd: <https://www.wikidata.org/wiki/>
+
+	SELECT ?sub ?name ?begin ?nameplace ?coordinates
+	WHERE {
+  ?sub rdf:type crm:E7_Activity ;
+       crm:P1_is_identified_by/rdfs:label ?name ;
+       crm:P4_has_time-span/crm:P81a_end_of_the_begin ?begin ;
+       crm:P7_took_place_at/rdfs:label ?nameplace ;
+       crm:P7_took_place_at/crm:P168_place_is_defined_by ?coordinates.
+	}
+	ORDER BY ?name
+	LIMIT 50
+  '
+  template='{{> artitstsTemplate}}'
+>
+	<template id='artitstsTemplate'>
+  	<head>
+      <meta charset ="utf-8">
+      <style>
+        body {
+          background-color: #fff;
+        }
+        h1 {
+          height: auto;
+          margin-top: 2%;
+          margin-left: 2%;
+          margin-right: 2%;
+          font-size: 50px;
+          color: white;
+          font-family: 'VT323', monospace;
+          background-color: RGBA(0,28,189,0.72);
+        }
+        h2 {
+          font-size: 25px;
+          color: black;
+        }
+        p {
+          font-size: 20px;
+          color: black;
+        }
+        a {
+          color:black;
+        }
+        bs-tabs {
+          background-color: rgba(93,88,42,0.12);
+          width: 90%;
+          margin-left: 2%;
+          margin-right: 2%;
+        }
+        .description {
+          margin-left: 2%;
+          margin-right: 2%;
+          font-size: 30px;
+        }
+        .text_tabs {
+          background-color: rgba(93,88,42,0.12);
+          font-size: 25px;
+          height: auto;
+        }
+        .text_tab {
+          font-size: 22px;
+          color: #046fcb;
+        }
+        h2, i, .description, p, bs-tabs, .tabs {
+          font-family: thesansosflight,Helvetica,Arial,sans-serif;
+        }
+      </style>
+    </head>
+    <body>
+		<h1>
+      Liste d'artistes/expositions
+    </h1>
+      <div class="description">
+        Voici une liste d'exposition d'artistes ou d'expositions dont une URI, une date, un lieu et des coordonnées sont attribués à chacun(e).
+      </div>
+			<ul style="list-style-type: none">
+			{{#each bindings}}
+				<li>
+						<div class="page__header-body">
+							<h2>{{name.value}}</h2>
+            		<semantic-link uri="{{sub.value}}">
+									<p>
+										<b>URI : </b>
+											<a href="{{sub.value}}">
+												<i>{{sub.value}}</i>
+                      </a>
+									</p>
+                 </semantic-link>
+						</div>
+              	<bs-tabs
+                         id='search' default-active-key='[[urlParam "activeTab"]]'
+                         class="text-center text_tabs"
+                         data-flex-layout="row center-stretch" #Pour répartir le texte de façon équivalente
+                >
+                  <bs-tab
+                          class="text_tab"
+                          event-key="Exposition date"
+                          title="Date de l'exposition"
+                  >
+                  	<i class="col-md-4
+                              text-center"
+                    >
+                      {{begin.value}}
+                    </i>
+                  </bs-tab>
+                 	<bs-tab
+                          class="text_tab"
+                          event-key="Exposition place"
+                          title="Lieu de l'exposition"
+                  >
+                  	<i class="col-md-offset-4
+                              col-md-4
+                              text-center"
+                    >
+                      {{nameplace.value}}
+                    </i>
+                  </bs-tab>
+                 	<bs-tab
+                          class="text_tab"
+                          event-key="Coordinates"
+                          title="Coordonnées du lieu d'exposition"
+                  >
+                  	<i class="col-md-offset-8
+                              col-md-4
+                              text-center"
+                    >
+                      {{coordinates.value}}
+                    </i>
+                  </bs-tab>
+            		</bs-tabs>
+			</li>
+		{{/each}}
+		</ul>
+  	</body>
+	</template>
+</semantic-query>
