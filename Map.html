@@ -1,0 +1,54 @@
+<h1>Carte des expositions</h1>
+  <div class="description">
+    Cette carte affiche les différentes expositions sur une carte sous forme de clusters. Pour séparer  ces derniers afin de d'avoir une meilleure lecture, il est nécessaire de zoomer.
+  </div>
+<div class="map">
+    <semantic-map
+        query='
+        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            SELECT ?wkt ?name ?namevariation WHERE {
+          ?s a crm:E53_Place ;
+             crm:P168_place_is_defined_by ?wkt ;
+             rdfs:label ?name ;
+             crm:P1_is_identified_by ?appellation .
+          ?appellation rdfs:label ?namevariation
+            }
+        '
+        tuple-template='<h2>Title: {{name.value}}</h2>
+                        <p class="description">Name variations in other languages: {{namevariation.value}}</p>'
+		>
+    </semantic-map>
+</div>
+<style>
+	.map {
+    height: 42vw;
+    width: 96%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  h1 {
+    height: auto;
+    margin-top: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+    font-size: 50px;
+    color: white;
+    font-family: 'VT323', monospace;
+    background-color: RGBA(0,28,189,0.72);
+  }
+  h2 {
+		font-size: 20px;
+    color: black;
+  }
+  .description {
+    margin-left: 2%;
+    margin-right: 2%;
+    font-size: 30px;
+  }
+  
+  h1, h2, .description {
+    font-family: thesansosflight,Helvetica,Arial,sans-serif;
+  }
+</style>

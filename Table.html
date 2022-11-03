@@ -1,0 +1,87 @@
+<h1>Table des expositions/artistes</h1>
+
+<div class="description">
+	La table ci-dessous détaille pour chaque ligne un lien, un nom d'exposition/d'artiste, une année de création et un lieu. Chaque colonne peut être trier par ordre alphabétique/alphanumérique.
+</div>
+
+<semantic-table class="table"
+  query='
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+
+  SELECT ?sub ?name ?begintime ?place
+	WHERE {
+  	?sub rdf:type crm:E7_Activity ;
+         crm:P1_is_identified_by /  rdfs:label ?name ;
+         crm:P4_has_time-span / crm:P81a_end_of_the_begin ?begintime ;
+         crm:P7_took_place_at / rdfs:label ?place . 
+	}
+	ORDER BY ?name
+      '
+  number-of-displayed-rows="10" #Pour afficher le nombre basique de lignes par page
+	options='{"showFilter": false}'
+  column-configuration='[
+      {"displayName": "Lien", "cellTemplate":
+                        "<div class=\"column_1\">
+                        	<i>{{sub.value}}</i>
+                     		</div>"
+    	},
+      {"displayName": "Nom", "cellTemplate":
+                        "<div class=\"column_2\">
+                        	<i>{{name.value}}</i>
+                     		</div>"
+    	},
+      {"displayName": "Année de création", "cellTemplate":
+                        "<div class=\"column_3\">
+                        	<i>{{begintime.value}}</i>
+                     		</div>"
+    	},
+      {"displayName": "Lieu", "cellTemplate":
+                        "<div class=\"column_4\">
+                        	<i>{{place.value}}</i>
+                     		</div>"
+      }
+  ]'
+>
+</semantic-table>
+<style>
+  h1 {
+    height: auto;
+    margin-top: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+    font-size: 50px;
+    color: white;
+    font-family: 'VT323', monospace;
+		background-color: RGBA(0,28,189,0.72);
+  }
+  .description {
+    margin-left: 2%;
+    margin-right: 2%;
+    font-size: 30px;
+  }
+  .table {
+    width: 96%;
+    margin-left: 2%;
+    margin-right: 2%;
+    background-color: rgba(93,88,42,0.12);
+  }
+  .column_1 {
+    width: 50%;
+  }
+  .column_2 {
+    width: 100%;
+  }
+  .column_3 {
+    width: 100%;
+  }
+  .column_4 {
+    width: 100%;
+  }
+  .column_1, .column_2, .column_3, .column_4 {
+    font-size: 20px;
+    font-family: thesansosflight,Helvetica,Arial,sans-serif;
+    color: black;
+  }
+</style>

@@ -1,0 +1,51 @@
+<h1>Ligne temporelle des expositions</h1>
+  <div class="description">
+    L'affichage ci-dessous met en avant les différentes expositions sur une ligne temporelle pour déterminer leur durée. Pour des raisons de lecture, seules 10 sont affichées et avec une possibilité de réduire ou agrandir l'échelle. 
+  </div>
+<semantic-timeline class="timeline"
+	query='
+  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+	PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+	
+	SELECT ?name ?start ?end
+	WHERE {
+    ?sub rdf:type crm:E7_Activity ;
+         crm:P1_is_identified_by / rdfs:label ?name ;      
+         crm:P4_has_time-span / crm:P81a_end_of_the_begin ?start ;
+         crm:P4_has_time-span / crm:P81b_begin_of_the_end ?end .
+	} LIMIT 10
+' tuple-template="{{> template}}" tuple-template-height="42">
+            <template id="template">
+                <b>{{name.value}}</b>
+                <div>{{start.value}} - {{end.value}}</div>
+            </template>
+          </semantic-timeline>
+
+<style>
+  h1 {
+    height: auto;
+    margin-top: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+    font-size: 50px;
+    color: white;
+    font-family: 'VT323', monospace;
+    background-color: RGBA(0,28,189,0.72);
+  }
+  .description {
+    margin-left: 2%;
+    margin-right: 2%;
+    font-size: 30px;
+  }
+  h1, .description {
+    font-family: thesansosflight,Helvetica,Arial,sans-serif;
+  }
+  .timeline {
+    width: 96%;
+    height: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
